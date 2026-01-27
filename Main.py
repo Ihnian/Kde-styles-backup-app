@@ -10,16 +10,17 @@ from PySide6.QtCore import QThread
 
 #Main class
 class App(QtWidgets.QWidget, QtCore.QThread):
-    progress =  QtCore.Signal()
-    finished = QtCore.Signal()
-    #Layout
+    #__init__
     def __init__(self):
         super().__init__()
         #none direction
         self.direction = ""
+        #creating thread
         self.thread = QtCore.QThread()
+        #Initialization UI
         self.UI()
     
+    #Layout
     def UI(self):
         #Ui components
         self.progressbar = QtWidgets.QProgressBar(value=0, maximum=100)
@@ -39,6 +40,7 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             self.copy_button.clicked.connect(self.Clone_thread)
         self.direction_button.clicked.connect(self.get_direction)
 
+    #Runing and starting cloning thread
     @QtCore.Slot()
     def Clone_thread(self):
         self.thread.run = self.cloning
@@ -64,6 +66,7 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             alert = QtWidgets.QLabel("Please choose folder")
             alert.show()
         else:
+            #coping desktoptheme
             desktoptheme = pathlib.Path("/usr/share/plasma/desktoptheme/")
             desktoptheme_folder = os.path.join(destination, "desktop_theme")
             os.makedirs(desktoptheme_folder, exist_ok=True)
@@ -71,6 +74,7 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             shutil.copytree(desktoptheme, desktoptheme_folder, dirs_exist_ok=True)
             self.progressbar.setValue(15)
 
+            #coping look and feel 
             look_and_feel_folder = os.path.join(destination, "look-and-feel")
             look_and_feel = pathlib.Path(f"{home_dir}/.local/share/plasma/look-and-feel/")
             os.makedirs(look_and_feel_folder, exist_ok=True)
@@ -78,6 +82,7 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             shutil.copytree(look_and_feel, look_and_feel_folder, dirs_exist_ok=True)
             self.progressbar.setValue(30)
 
+            #coping config files
             kdeglobals = pathlib.Path(f"{home_dir}/.config/kdeglobals")
             appletsrc = pathlib.Path(f"{home_dir}/.config/plasma-org.kde.plasma.desktop-appletsrc")
             plasmarc = pathlib.Path(f"{home_dir}/.config/plasmarc")
@@ -89,6 +94,7 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             shutil.copy(appletsrc, config_folder)
             self.progressbar.setValue(55)
 
+            #coping icons
             icons  = pathlib.Path(f"{home_dir}/.local/share/icons/")
             icons_folder = os.path.join(destination, "Icons")
             os.makedirs(icons_folder, exist_ok=True)
@@ -96,6 +102,7 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             shutil.copytree(icons, icons_folder, dirs_exist_ok=True)
             self.progressbar.setValue(80)
             
+            #copying plasmoids
             plasmoid = pathlib.Path(f"{home_dir}/.local/share/plasma/plasmoids/")
             plasmoid_folder = os.path.join(destination, "plasmoid")
             os.makedirs(plasmoid_folder, exist_ok=True)

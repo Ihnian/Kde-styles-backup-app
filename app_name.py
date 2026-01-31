@@ -19,10 +19,11 @@ class App(QtWidgets.QWidget, QtCore.QThread):
         self.thread = QtCore.QThread()
         #Initialization UI
         self.UI()
-        self.styles()
+        self.dark_theme()
     
     #Layout
     def UI(self):
+        
         #Ui components
         self.progressbar = QtWidgets.QProgressBar(value=0, maximum=100)
         self.direction_button = QtWidgets.QPushButton("Choose directory")
@@ -41,12 +42,26 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             self.copy_button.clicked.connect(self.Clone_thread)
         self.direction_button.clicked.connect(self.get_direction)
         
-    def styles(self):
+    def dark_theme(self):
         self.copy_button.setStyleSheet("""
             QPushButton {
-                background-color: #3498db;
+                background-color: #222222;
                 color: white;}""")
-        
+        self.direction_button.setStyleSheet("""
+            QPushButton {
+                background-color: #222222;
+                color: white;}""")
+        self.setStyleSheet("background-color:#111111")
+    def light_theme(self):
+        self.copy_button.setStyleSheet("""
+            QPushButton {
+                background-color: #666666;
+                color: black;}""")
+        self.direction_button.setStyleSheet("""
+            QPushButton {
+                background-color: #666666;
+                color: black;}""")
+        self.setStyleSheet("background-color:#bfbfbf; color: black;")
     #Runing and starting cloning thread
     @QtCore.Slot()
     def Clone_thread(self):
@@ -125,7 +140,6 @@ class App(QtWidgets.QWidget, QtCore.QThread):
 #starting app
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
-
     widget = App()
     widget.resize(300, 200)
     widget.show()

@@ -39,7 +39,8 @@ class App(QtWidgets.QWidget, QtCore.QThread):
         self.layout.addWidget(self.copy_button)
         #button clicked
         if not self.thread.isRunning():
-            self.copy_button.clicked.connect(self.Clone_thread)
+            self.copy_button.clicked.connect(self.test)
+            #self.copy_button.clicked.connect(self.Clone_thread)
         self.direction_button.clicked.connect(self.get_direction)
         
     def dark_theme(self):
@@ -52,16 +53,6 @@ class App(QtWidgets.QWidget, QtCore.QThread):
                 background-color: #222222;
                 color: white;}""")
         self.setStyleSheet("background-color:#111111")
-    def light_theme(self):
-        self.copy_button.setStyleSheet("""
-            QPushButton {
-                background-color: #666666;
-                color: black;}""")
-        self.direction_button.setStyleSheet("""
-            QPushButton {
-                background-color: #666666;
-                color: black;}""")
-        self.setStyleSheet("background-color:#bfbfbf; color: black;")
     #Runing and starting cloning thread
     @QtCore.Slot()
     def Clone_thread(self):
@@ -78,6 +69,14 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             "choose folder for copy"
         )
         
+    @QtCore.Slot()
+    def test(self):
+        file_destination = self.direction
+        file_name = "PATHS.txt"
+        file_path = os.path.join(file_destination, file_name)
+
+        with open(file_path, "w") as f:
+            f.write("")
     
     #cloning files
     @QtCore.Slot()
@@ -135,6 +134,7 @@ class App(QtWidgets.QWidget, QtCore.QThread):
             
             self.label.setText("Done")
         self.finished.emit()
+
 
 
 #starting app
